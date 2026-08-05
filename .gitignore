@@ -1,0 +1,7 @@
+build/
+*.bin
+*.elf
+*.map
+vendor/*.zip
+vendor/*.html
+vendor/download_parts/
