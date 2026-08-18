@@ -23,7 +23,7 @@ particular load, especially one with high startup inrush.
 
 ## Touch UI
 
-- `ON TIME`: 1-5 s, 1 s per tap or held repeat
+- `ON TIME`: 1 s-60 min, 1 s per tap and 1 min per held repeat
 - `OFF TIME`: 1-60 s, 1 s per tap or held repeat
 - `CYCLES`: 1-1,000,000, accelerated while held
 - `HOLD TO START`: a left-to-right gauge fills during the 1.5-second hold;
@@ -61,7 +61,8 @@ up to 24 hours; the touchscreen currently caps it at 60 seconds.
 - A cycle is counted only after a full ON interval and its following OFF dwell.
 - Stop, pause, reset, invalid internal state, or serial-buffer overflow force
   the relay OFF.
-- ON time has a hard 5-second limit until electrical feedback is added.
+- ON time has a bounded 60-minute maximum. Electrical feedback is still
+  required before unattended qualification testing.
 - Relay deadlines are checked before and after serial and LVGL processing.
 - The Arduino loop watchdog is enabled.
 - `status` reports the largest measured software ON-time overrun.

@@ -19,7 +19,8 @@ constexpr uint32_t kMinimumPulseMs = 50;
 constexpr uint32_t kMaximumPulseMs = 5000;
 constexpr uint32_t kMinimumPhaseMs = 1000;
 constexpr uint32_t kUiTimeStepMs = 1000;
-constexpr uint32_t kMaximumOnMs = 5000;
+constexpr uint32_t kUiHeldOnTimeStepMs = 60UL * 1000UL;
+constexpr uint32_t kMaximumOnMs = 60UL * 60UL * 1000UL;
 constexpr uint32_t kMaximumOffMs = 24UL * 60UL * 60UL * 1000UL;
 constexpr uint32_t kMaximumCycles = 1000000;
 constexpr size_t kCommandBufferSize = 96;
@@ -314,7 +315,7 @@ bool applyConfiguration(uint32_t onMs, uint32_t offMs, uint32_t cycles) {
   if (onMs < kMinimumPhaseMs || onMs > kMaximumOnMs ||
       offMs < kMinimumPhaseMs || offMs > kMaximumOffMs || cycles < 1 ||
       cycles > kMaximumCycles) {
-    Serial.println(F("ERROR config: on=1000..5000 ms, off=1000..86400000 ms, cycles=1..1000000"));
+    Serial.println(F("ERROR config: on=1000..3600000 ms, off=1000..86400000 ms, cycles=1..1000000"));
     return false;
   }
 
@@ -442,7 +443,7 @@ void handleConfigCommand() {
                           offMs) ||
       !parseBoundedUint32(cyclesArgument, 1, kMaximumCycles, cycles) ||
       extraArgument != nullptr) {
-    Serial.println(F("ERROR config: on=1000..5000 ms, off=1000..86400000 ms, cycles=1..1000000"));
+    Serial.println(F("ERROR config: on=1000..3600000 ms, off=1000..86400000 ms, cycles=1..1000000"));
     return;
   }
 
@@ -769,7 +770,7 @@ void onAdjustButton(lv_event_t* event) {
       value = &uiOnMs;
       minimum = kMinimumPhaseMs;
       maximum = kMaximumOnMs;
-      step = kUiTimeStepMs;
+      step = repeating ? kUiHeldOnTimeStepMs : kUiTimeStepMs;
       break;
     case AdjustField::kOffMs:
       value = &uiOffMs;
